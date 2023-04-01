@@ -10,6 +10,7 @@ import {
   SignupPage,
   TweetPage,
   UserPage,
+  NotificationPage,
 } from './pages';
 import {
   AdminLayout,
@@ -46,7 +47,7 @@ function App() {
               <Route path=":id" element={<ReplyPage />} />
             </Route>
             <Route>
-              <Route path="notification" />
+              <Route path="notification" element={<NotificationPage />} />
             </Route>
             <Route element={<UserPage />}>
               <Route path="users/:id">
