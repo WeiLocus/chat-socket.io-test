@@ -200,6 +200,18 @@ export function Navbar({ tweetInput, currentUser, onChange, onAddTweet }) {
                 <span>首頁</span>
               </StyledLi>
             </NavLink>
+            <NavLink to="/notification">
+              <StyledLi>
+                <div className="icon">
+                  {pathname.includes('/notification') ? (
+                    <NotificationNavbarBlackIcon />
+                  ) : (
+                    <NotificationNavbarIcon />
+                  )}
+                </div>
+                <span>通知</span>
+              </StyledLi>
+            </NavLink>
             <NavLink
               to={`/users/${currentUser.id}/tweets`}
               className={
