@@ -47,12 +47,8 @@ function App() {
               <Route index element={<TweetPage />} />
               <Route path=":id" element={<ReplyPage />} />
             </Route>
-            <Route>
-              <Route path="notification" element={<NotificationPage />} />
-            </Route>
-            <Route>
-              <Route path="public" element={<PublicChatPage />} />
-            </Route>
+            <Route path="notification" element={<NotificationPage />} />
+            <Route path="public" element={<PublicChatPage />} />
             <Route element={<UserPage />}>
               <Route path="users/:id">
                 <Route path="tweets" element={<UserTweetList />} />

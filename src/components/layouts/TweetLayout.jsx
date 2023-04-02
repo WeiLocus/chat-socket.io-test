@@ -18,6 +18,7 @@ export default function TweetLayout() {
   const [tweets, setTweets] = useState([]);
   const [tweetInput, setTweetInput] = useState('');
   const { pathname } = useLocation();
+  const isPublic = pathname.includes('public');
 
   const handleInputChange = (value) => {
     setTweetInput(value);
@@ -83,7 +84,7 @@ export default function TweetLayout() {
   }, []);
 
   return (
-    <GridContainer>
+    <GridContainer isPublic={isPublic}>
       <div className="fr1">
         <Navbar
           tweetInput={tweetInput}
@@ -108,7 +109,7 @@ export default function TweetLayout() {
         {!pathname.includes('settings') && !pathname.includes('public') && (
           <Popular />
         )}
-        {pathname.includes('public') && <ChatRecord />}
+        {isPublic && <ChatRecord />}
       </div>
     </GridContainer>
   );

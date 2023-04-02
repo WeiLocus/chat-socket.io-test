@@ -22,7 +22,7 @@ const StyledNav = styled.nav`
   position: absolute;
   bottom: 0;
   border-top: 2px solid var(--color-gray-200);
-  background-color: #fff;
+  /* background-color: #fff; */
   z-index: 1;
 
   .logo,

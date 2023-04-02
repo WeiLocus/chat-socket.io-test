@@ -156,6 +156,8 @@ export const GridContainer = styled(Container)`
     display: grid;
     grid-template-columns: 1fr 4fr 3fr;
 
+    ${(props) => props.isPublic && `grid-template-columns: 1fr 3fr 4fr;`}
+
     .fr3 {
       display: unset;
     }
@@ -163,5 +165,6 @@ export const GridContainer = styled(Container)`
 
   @media screen and (${device.lg}) {
     grid-template-columns: 1fr 3fr 1.75fr;
+    ${(props) => props.isPublic && `grid-template-columns: 1fr 3fr 4fr;`}
   }
 `;
