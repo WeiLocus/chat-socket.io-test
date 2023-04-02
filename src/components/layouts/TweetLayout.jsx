@@ -3,6 +3,7 @@ import { Outlet, useLocation } from 'react-router-dom';
 import { GridContainer } from '../../globalStyles';
 import { Navbar } from '../Navbar';
 import Popular from '../Popular';
+import ChatRecord from '../ChatRecord';
 import { useUser } from '../../contexts/UserContext';
 import { addTweet } from '../../api/tweet';
 import {
@@ -103,7 +104,12 @@ export default function TweetLayout() {
           }}
         />
       </div>
-      <div className="fr3">{!pathname.includes('settings') && <Popular />}</div>
+      <div className="fr3">
+        {!pathname.includes('settings') && !pathname.includes('public') && (
+          <Popular />
+        )}
+        {pathname.includes('public') && <ChatRecord />}
+      </div>
     </GridContainer>
   );
 }
