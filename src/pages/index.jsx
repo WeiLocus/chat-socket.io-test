@@ -7,3 +7,4 @@ export { default as SignupPage } from './SignupPage';
 export { default as TweetPage } from './TweetPage';
 export { default as UserPage } from './UserPage';
 export { default as NotificationPage } from './NotificationPage';
+export { default as PublicChat } from './PublicChat';
