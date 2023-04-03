@@ -12,7 +12,7 @@ const server = http.createServer(app);
 const io = new Server(server, {
   cors: {
     // react run
-    origin: 'http://localhost:5173/twitter',
+    origin: 'http://localhost:5173',
     methods: ['GET', 'POST'],
   },
 });
@@ -21,18 +21,10 @@ const io = new Server(server, {
 io.on('connection', (socket) => {
   console.log(`User Connected: ${socket.id}`);
 
-  // declare event -  name:join_room
-  // pass room ID through data
-  // socket.on('join_room', (data) => {
-  //   socket.join(data);
-  //   console.log(`User with ID: ${socket.id} joined room: ${data}`);
-  // });
   // 使用 io.on 監聽事件，用 socket.emit 方法傳送一個 receive_message事件
   socket.on('send_message', (data) => {
-    // console.log(data)
-    io.sockets.emit('receive_message', data);
-    // only want to emit message to who in that room
-    // socket.to(data.room).emit("receive_message", data);
+    // console.log(data);
+    io.emit('receive_message', data);
   });
 
   socket.on('disconnect', () => {
