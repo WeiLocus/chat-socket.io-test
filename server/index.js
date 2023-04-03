@@ -11,11 +11,13 @@ const server = http.createServer(app);
 
 const io = new Server(server, {
   cors: {
-    origin: 'http://localhost:5174',
+    // react run
+    origin: 'http://localhost:5173/twitter',
     methods: ['GET', 'POST'],
   },
 });
 
+// io.on means listen connection event
 io.on('connection', (socket) => {
   console.log(`User Connected: ${socket.id}`);
 

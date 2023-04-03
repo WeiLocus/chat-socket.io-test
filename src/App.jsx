@@ -1,4 +1,5 @@
 import { Route, Routes, BrowserRouter } from 'react-router-dom';
+import io from 'socket.io-client';
 import { UserProvider } from './contexts/UserContext';
 import { GlobalStyle } from './globalStyles';
 import {
