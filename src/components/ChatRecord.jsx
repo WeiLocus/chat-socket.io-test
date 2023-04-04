@@ -128,13 +128,12 @@ const StyledDiv = styled.div`
   }
 `;
 
-// const socket = io.connect('http://localhost:3001');
+const socket = io.connect('http://localhost:3001');
 
 export default function ChatRecord() {
   const { currentUser } = useUser();
   const [currentMessage, setCurrentMessage] = useState('');
   const [messageList, setMessageList] = useState([]);
-  console.log(currentUser);
 
   const handleSendMessage = async () => {
     if (currentMessage !== '') {
@@ -152,11 +151,6 @@ export default function ChatRecord() {
     }
   };
   useEffect(() => {
-    const socket = io.connect('http://localhost:3001', {
-      query: {
-        username: currentUser.name,
-      },
-    });
     console.log(`${currentUser.name} joined the chat`);
     socket.on('receive_message', (data) => {
       // console.log(data);

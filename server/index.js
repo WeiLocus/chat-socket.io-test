@@ -20,7 +20,6 @@ const io = new Server(server, {
 // io.on means listen connection event
 io.on('connection', (socket) => {
   console.log(`User Connected: ${socket.id}`);
-  socket.broadcast.emit('receive_message', data);
 
   // 使用 io.on 監聽事件，用 socket.emit 方法傳送一個 receive_message事件
   socket.on('send_message', (data) => {
