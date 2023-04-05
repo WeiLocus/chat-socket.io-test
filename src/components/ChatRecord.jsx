@@ -129,8 +129,8 @@ const StyledDiv = styled.div`
   }
 `;
 
-const socket = io.connect('http://localhost:3001');
-// const socket = io.connect('https://murmuring-plains-40389.herokuapp.com/');
+// const socket = io.connect('http://localhost:3001');
+const socket = io.connect('https://murmuring-plains-40389.herokuapp.com/');
 
 export default function ChatRecord() {
   const { currentUser } = useUser();
