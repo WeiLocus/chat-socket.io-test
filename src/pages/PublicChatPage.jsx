@@ -5,6 +5,7 @@ import ChatRoom from '../components/ChatRoom';
 import { device } from '../globalStyles.js';
 import socket from '../socket';
 import { useUser } from '../contexts/UserContext';
+import { useState } from 'react';
 
 const StyledDiv = styled.div`
   display: grid;
@@ -41,12 +42,6 @@ const StyledListItem = styled.li`
   }
 `;
 
-const dummyUser = {
-  avatar: 'http://placekitten.com/g/200/300',
-  name: 'user1',
-  account: 'user1',
-};
-
 function OnlineUserItem({ user }) {
   return (
     <StyledListItem>
@@ -61,20 +56,41 @@ function OnlineUserItem({ user }) {
 
 export default function PublicChatPage() {
   const { currentUser } = useUser();
+  const [onlineUsers, setOnlineUsers] = useState([]);
+
   useEffect(() => {
     socket.connect();
+    socket.emit('join_chat', currentUser);
+    console.log(`${currentUser.name} joined the chat`);
+
     return () => {
       socket.emit('leave_chat', currentUser);
       socket.disconnect();
     };
-  });
+  }, []);
+
+  useEffect(() => {
+    socket.on('user_join', (data) => {
+      const nextOnlineUsers = [...onlineUsers, data];
+      setOnlineUsers(nextOnlineUsers);
+      console.log(`${data.name} joined the chat`);
+    });
+
+    socket.on('user_leave', (data) => {
+      const nextOnlineUsers = onlineUsers.filter((user) => user.id !== data.id);
+      setOnlineUsers(nextOnlineUsers);
+      console.log(`${data.name} left the chat`);
+    });
+  }, [onlineUsers]);
 
   return (
     <StyledDiv>
       <div>
-        <Header headerText="上線使用者(5)" />
+        <Header headerText={`上線使用者(${onlineUsers.length})`} />
         <StyledList>
-          <OnlineUserItem user={dummyUser} />
+          {onlineUsers.map((user) => {
+            return <OnlineUserItem user={user} key={user.id} />;
+          })}
         </StyledList>
       </div>
       <div>

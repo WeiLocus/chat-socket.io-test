@@ -101,7 +101,7 @@ function UserNotification({ message }) {
   return (
     <StyledNotification>
       <p>
-        {message.user} {message.action}
+        {message.user.name} {message.action}
       </p>
     </StyledNotification>
   );
@@ -176,8 +176,8 @@ export default function ChatRoom() {
   };
 
   useEffect(() => {
-    socket.emit('join_chat', currentUser);
-    console.log(`${currentUser.name} joined the chat`);
+    // socket.emit('join_chat', currentUser);
+    // console.log(`${currentUser.name} joined the chat`);
 
     socket.on('user_join', (data) => {
       setMessageList((list) => [
@@ -188,7 +188,7 @@ export default function ChatRoom() {
           action: '上線',
         },
       ]);
-      console.log(`${data} joined the chat`);
+      console.log(`${data.name} joined the chat`);
     });
 
     socket.on('receive_message', (data) => {

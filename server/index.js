@@ -22,8 +22,7 @@ io.on('connection', (socket) => {
   console.log(`User Connected: ${socket.id}`);
 
   socket.on('join_chat', (data) => {
-    console.log(data);
-    io.emit('user_join', data.name);
+    io.emit('user_join', data);
   });
 
   // 使用 io.on 監聽事件，用 socket.emit 方法傳送一個 receive_message事件
@@ -34,7 +33,7 @@ io.on('connection', (socket) => {
 
   socket.on('leave_chat', (data) => {
     console.log(data);
-    io.emit('user_leave', data.name);
+    io.emit('user_leave', data);
   });
 
   socket.on('disconnect', () => {
