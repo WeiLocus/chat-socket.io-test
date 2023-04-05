@@ -1,7 +1,10 @@
+import { useEffect } from 'react';
 import styled from 'styled-components';
 import { Header } from '../components';
-import ChatRecord from '../components/ChatRecord';
+import ChatRoom from '../components/ChatRoom';
 import { device } from '../globalStyles.js';
+import socket from '../socket';
+import { useUser } from '../contexts/UserContext';
 
 const StyledDiv = styled.div`
   display: grid;
@@ -20,28 +23,62 @@ const StyledList = styled.div`
 const StyledListItem = styled.li`
   display: grid;
   grid-template-columns: calc(50px + 0.5rem) 1fr;
+  align-items: center;
   width: 100%;
   padding: 1rem;
   border-bottom: 1px solid var(--color-gray-200);
+
+  img {
+    width: 45px;
+    height: 45px;
+    aspect-ratio: 1/1;
+    border-radius: 50%;
+  }
+
+  span {
+    color: var(--color-secondary);
+    margin-left: 0.5rem;
+  }
 `;
 
+const dummyUser = {
+  avatar: 'http://placekitten.com/g/200/300',
+  name: 'user1',
+  account: 'user1',
+};
+
+function OnlineUserItem({ user }) {
+  return (
+    <StyledListItem>
+      <img src={user.avatar} alt="avatar" />
+      <div>
+        <b>{user.name}</b>
+        <span>@{user.account}</span>
+      </div>
+    </StyledListItem>
+  );
+}
+
 export default function PublicChatPage() {
+  const { currentUser } = useUser();
+  useEffect(() => {
+    socket.connect();
+    return () => {
+      socket.emit('leave_chat', currentUser);
+      socket.disconnect();
+    };
+  });
+
   return (
     <StyledDiv>
       <div>
         <Header headerText="上線使用者(5)" />
         <StyledList>
-          <StyledListItem>
-            <img src="http://placekitten.com/g/200/300" alt="avatar" />
-            <div>
-              <b>name</b>
-              <span>@account</span>
-            </div>
-          </StyledListItem>
+          <OnlineUserItem user={dummyUser} />
         </StyledList>
       </div>
       <div>
-        <ChatRecord />
+        <ChatRoom />
       </div>
     </StyledDiv>
   );
