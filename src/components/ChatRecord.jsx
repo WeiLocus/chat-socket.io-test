@@ -146,20 +146,20 @@ export default function ChatRecord() {
           Date.now()
         ).getMinutes()}`,
       };
-      // send messageDate to back-end
-      await socket.emit('send_message', messageData);
+      // send messsageDate to back-end
+      // await socket.emit('send_message', messageData);
       setMessageList((list) => [...list, messageData]);
       setCurrentMessage('');
     }
   };
-  useEffect(() => {
-    console.log(`${currentUser.name} joined the chat`);
-    socket.on('receive_message', (data) => {
-      console.log(data);
-      setMessageList((list) => [...list, data]);
-      console.log('message received!');
-    });
-  }, []);
+  // useEffect(() => {
+  //   console.log(`${currentUser.name} joined the chat`);
+  //   socket.on('receive_message', (data) => {
+  //     // console.log(data);
+  //     setMessageList((list) => [...list, data]);
+  //     console.log('message received!');
+  //   });
+  // }, []);
 
   return (
     <>

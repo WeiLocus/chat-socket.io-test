@@ -3,7 +3,6 @@ import { Outlet, useLocation } from 'react-router-dom';
 import { GridContainer } from '../../globalStyles';
 import { Navbar } from '../Navbar';
 import Popular from '../Popular';
-import ChatRecord from '../ChatRecord';
 import { useUser } from '../../contexts/UserContext';
 import { addTweet } from '../../api/tweet';
 import {
@@ -18,7 +17,6 @@ export default function TweetLayout() {
   const [tweets, setTweets] = useState([]);
   const [tweetInput, setTweetInput] = useState('');
   const { pathname } = useLocation();
-  const isPublic = pathname.includes('public');
 
   const handleInputChange = (value) => {
     setTweetInput(value);
@@ -84,7 +82,7 @@ export default function TweetLayout() {
   }, []);
 
   return (
-    <GridContainer isPublic={isPublic}>
+    <GridContainer className={pathname.includes('public') && 'chat'}>
       <div className="fr1">
         <Navbar
           tweetInput={tweetInput}
@@ -105,12 +103,7 @@ export default function TweetLayout() {
           }}
         />
       </div>
-      <div className="fr3">
-        {!pathname.includes('settings') && !pathname.includes('public') && (
-          <Popular />
-        )}
-        {isPublic && <ChatRecord />}
-      </div>
+      <div className="fr3">{!pathname.includes('settings') && <Popular />}</div>
     </GridContainer>
   );
 }
