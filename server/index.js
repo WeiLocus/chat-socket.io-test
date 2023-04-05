@@ -21,16 +21,26 @@ const io = new Server(server, {
 io.on('connection', (socket) => {
   console.log(`User Connected: ${socket.id}`);
 
+  // data: currentUser
   socket.on('join_chat', (data) => {
     io.emit('user_join', data);
   });
 
-  // 使用 io.on 監聽事件，用 socket.emit 方法傳送一個 receive_message事件
+  // data: messageData 訊息內容
+  // const messageData = {
+  //   type: 'message',
+  //   author: currentUser,
+  //   message: currentMessage,
+  //   time: `${new Date(Date.now()).getHours()}:${new Date(
+  //     Date.now()
+  //   ).getMinutes()}`,
+  // };
   socket.on('send_message', (data) => {
     console.log(data);
     socket.broadcast.emit('receive_message', data);
   });
 
+  // data: currentUser
   socket.on('leave_chat', (data) => {
     console.log(data);
     io.emit('user_leave', data);
