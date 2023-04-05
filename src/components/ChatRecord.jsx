@@ -5,9 +5,11 @@ import { useState, useEffect } from 'react';
 import ScrollToBottom from 'react-scroll-to-bottom';
 import { Header } from '.';
 import { ReactComponent as SendMessage } from '../assets/SendMessage.svg';
+import { useUser } from '../contexts/UserContext';
 
 const StyledDiv = styled.div`
   height: calc(100vh - 68px);
+  width: 100%;
 
   .chat-body {
     height: calc(100vh - (68px + 64px));
@@ -21,20 +23,36 @@ const StyledDiv = styled.div`
     }
 
     .message {
+      display: flex;
       background-color: pink;
       padding: 10px;
+
+      .avatar {
+        min-width: 60px;
+
+        img {
+          width: 50px;
+          height: 50px;
+          aspect-ratio: 1/1;
+          margin-right: 0.5rem;
+          border-radius: 50%;
+          overflow: hidden;
+        }
+      }
 
       .message-content {
         display: flex;
         align-items: center;
-        min-height: 40px;
-        max-width: 120px;
+        /* min-height: 40px; */
+        /* max-width:  120px; */
         margin-right: 5px;
         margin-left: 5px;
         padding-right: 1rem;
         padding-left: 1rem;
         background-color: var(--color-gray-200);
-        border-radius: 30px 30px 30px 0px;
+        border-radius: 25px 25px 25px 0px;
+        /* overflow-wrap: break-word;
+        word-wrap: break-word; */
       }
 
       .message-meta {
@@ -76,20 +94,24 @@ const StyledDiv = styled.div`
 `;
 
 const socket = io.connect('http://localhost:3001');
+// const socket = io.connect('https://murmuring-plains-40389.herokuapp.com/');
 
 export default function ChatRecord() {
+  const { currentUser } = useUser();
+  const { name, avatar } = currentUser;
   const [currentMessage, setCurrentMessage] = useState('');
   const [messageList, setMessageList] = useState([]);
 
   const handleSendMessage = async () => {
     if (currentMessage !== '') {
       const messageData = {
+        sender: name,
         message: currentMessage,
         time: `${new Date(Date.now()).getHours()}:${new Date(
           Date.now()
         ).getMinutes()}`,
       };
-      // send messsageDate to back-end
+      // send messageDate to back-end
       await socket.emit('send_message', messageData);
       // setMessageList((list) => [...list, messageData]);
       // setCurrentMessage('')
@@ -97,8 +119,9 @@ export default function ChatRecord() {
   };
   useEffect(() => {
     socket.on('receive_message', (data) => {
-      // console.log(data);
+      console.log(data);
       setMessageList((list) => [...list, data]);
+      setCurrentMessage('');
     });
   }, []);
   return (
@@ -115,6 +138,9 @@ export default function ChatRecord() {
                     // eslint-disable-next-line react/no-array-index-key
                     key={index}
                   >
+                    <div className="avatar">
+                      <img src={avatar} alt="avatar" />
+                    </div>
                     <div>
                       <div className="message-content">
                         <p>{messageContent.message}</p>
