@@ -1,11 +1,10 @@
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import styled from 'styled-components';
 import { Header } from '../components';
 import ChatRoom from '../components/ChatRoom';
 import { device } from '../globalStyles.js';
 import socket from '../socket';
 import { useUser } from '../contexts/UserContext';
-import { useState } from 'react';
 
 const StyledDiv = styled.div`
   display: grid;
@@ -65,22 +64,36 @@ export default function PublicChatPage() {
 
     return () => {
       socket.emit('leave_chat', currentUser);
+      socket.off('join_chat');
+      socket.off('user_leave');
       socket.disconnect();
     };
-  }, []);
+  }, [currentUser]);
 
   useEffect(() => {
     socket.on('user_join', (data) => {
-      const nextOnlineUsers = [...onlineUsers, data];
-      setOnlineUsers(nextOnlineUsers);
-      console.log(`${data.name} joined the chat`);
+      if (!onlineUsers.some((user) => user.id === data.id)) {
+        const nextOnlineUsers = [...onlineUsers, data];
+        setOnlineUsers(nextOnlineUsers);
+        console.log('nextOnlineUsers', nextOnlineUsers);
+        // console.log(`${data.name} joined`);
+        console.log(
+          `有使用者加入聊天室。目前共有 ${nextOnlineUsers.length} 位使用者。`
+        );
+      }
     });
 
     socket.on('user_leave', (data) => {
       const nextOnlineUsers = onlineUsers.filter((user) => user.id !== data.id);
       setOnlineUsers(nextOnlineUsers);
-      console.log(`${data.name} left the chat`);
+      console.log(`${data.name} left`);
+      console.log(
+        `有使用者離開聊天室。目前共有 ${nextOnlineUsers.length} 位使用者。`
+      );
     });
+    // return () => {
+    //   socket.off('user_leave');
+    // };
   }, [onlineUsers]);
 
   return (

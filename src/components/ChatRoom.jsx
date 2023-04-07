@@ -1,3 +1,4 @@
+/* eslint-disable react/no-array-index-key */
 /* eslint-disable react/button-has-type */
 import styled from 'styled-components';
 import io from 'socket.io-client';
@@ -29,7 +30,7 @@ const StyledMessage = styled.div`
     padding: 0.5rem 1rem;
     background-color: var(--color-gray-200);
     border-radius: 30px 30px 30px 0px;
-    overflow-warp: break-word;
+    word-break: break-word;
   }
 
   .message-meta {
@@ -206,7 +207,7 @@ export default function ChatRoom() {
           action: '離開',
         },
       ]);
-      console.log(`${data} left the chat`);
+      console.log(`${data.name} left the chat`);
     });
   }, []);
 
