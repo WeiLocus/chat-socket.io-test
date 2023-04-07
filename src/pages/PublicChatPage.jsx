@@ -91,9 +91,10 @@ export default function PublicChatPage() {
         `有使用者離開聊天室。目前共有 ${nextOnlineUsers.length} 位使用者。`
       );
     });
-    // return () => {
-    //   socket.off('user_leave');
-    // };
+    return () => {
+      socket.off('user_join');
+      socket.off('user_leave');
+    };
   }, [onlineUsers]);
 
   return (

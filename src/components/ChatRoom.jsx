@@ -209,7 +209,12 @@ export default function ChatRoom() {
       ]);
       console.log(`${data.name} left the chat`);
     });
-  }, []);
+    return () => {
+      socket.off('user_join');
+      socket.off('receive_message');
+      socket.off('user_leave');
+    };
+  }, [messageList]);
 
   return (
     <>
