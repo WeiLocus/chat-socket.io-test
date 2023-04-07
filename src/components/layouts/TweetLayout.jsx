@@ -82,7 +82,7 @@ export default function TweetLayout() {
   }, []);
 
   return (
-    <GridContainer className={pathname.includes('public') && 'chat'}>
+    <GridContainer className={pathname.includes('messages') && 'chat'}>
       <div className="fr1">
         <Navbar
           tweetInput={tweetInput}
