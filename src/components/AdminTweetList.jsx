@@ -131,7 +131,7 @@ export default function AdminTweetList() {
 }
 function TweetList({ tweet, onDelete }) {
   const { id, description, createdAt, User } = tweet;
-  const { account, addname, avatar } = User;
+  const { account, name, avatar } = User;
   const timeAgo = countTimeDiff(createdAt);
   const tweetDescription =
     description.length > 50 ? `${description.slice(0, 50)}...` : description;

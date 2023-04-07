@@ -20,7 +20,8 @@ const StyledList = styled.div`
 
 const StyledListItem = styled.li`
   display: grid;
-  grid-template-columns: calc(50px + 0.5rem) 1fr;
+  grid-template-columns: calc(50px + 0.5rem) 1fr 80px;
+  height: 100px;
   align-items: center;
   width: 100%;
   padding: 1rem;
@@ -37,16 +38,33 @@ const StyledListItem = styled.li`
     color: var(--color-secondary);
     margin-left: 0.5rem;
   }
+  .message {
+    font-size: var(--fs-basic);
+    color: var(--color-gray-700);
+  }
+  .time {
+    align-self: flex-start;
+    padding-top: 0.5rem;
+    text-align: end;
+    color: var(--color-gray-700);
+  }
 `;
 
-function OnlineUserItem({ user }) {
+function OnlineUserItem({ user, messages }) {
   return (
     <StyledListItem>
-      <img src={user.avatar} alt="avatar" />
+      <img
+        src="https://cloudflare-ipfs.com/ipfs/Qmd3W5DuhgHirLHGVixi6V76LhCkZUz6pnFt5AJBiyvHye/avatar/268.jpg"
+        alt="avatar"
+      />
       <div>
-        <b>{user.name}</b>
-        <span>@{user.account}</span>
+        <div>
+          <b>name</b>
+          <span>@account</span>
+        </div>
+        <p className="message">{messages}</p>
       </div>
+      <div className="time">6月30日</div>
     </StyledListItem>
   );
 }
@@ -57,12 +75,10 @@ export default function PrivateChatPage() {
   return (
     <StyledDiv>
       <div>
-        <Header headerText="上線使用者(3)" />
+        <Header headerText="訊息" />
         <StyledList>
-          <div>users</div>
-          {/* {onlineUsers.map((user) => {
-            return <OnlineUserItem user={user} key={user.id} />;
-          })} */}
+          <OnlineUserItem messages="Hello" />
+          <OnlineUserItem messages="Uncaught TypeError: user is undefined" />
         </StyledList>
       </div>
       {/* <div>
