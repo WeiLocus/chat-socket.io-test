@@ -1,3 +1,4 @@
+/* eslint-disable react/no-array-index-key */
 /* eslint-disable react/button-has-type */
 import styled from 'styled-components';
 import io from 'socket.io-client';
@@ -6,6 +7,7 @@ import ScrollToBottom from 'react-scroll-to-bottom';
 import { Header } from '.';
 import { ReactComponent as SendMessage } from '../assets/SendMessage.svg';
 import { useUser } from '../contexts/UserContext';
+import socket from '../socket.js';
 
 const StyledMessage = styled.div`
   padding: 10px;
@@ -28,7 +30,7 @@ const StyledMessage = styled.div`
     padding: 0.5rem 1rem;
     background-color: var(--color-gray-200);
     border-radius: 30px 30px 30px 0px;
-    overflow-warp: break-word;
+    word-break: break-word;
   }
 
   .message-meta {
@@ -82,8 +84,28 @@ function ChatMessage({ message }) {
   );
 }
 
-function UserNotification({ user, action }) {
-  return <div>User A joined the chat</div>;
+const StyledNotification = styled.div`
+  display: flex;
+  justify-content: center;
+  margin-block: 0.75rem;
+  p {
+    padding: 0.25rem 0.75rem;
+    border-radius: 50px;
+    color: var(--color-secondary);
+    background-color: var(--color-gray-300);
+    font-size: var(--fs-secondary);
+    text-align: center;
+  }
+`;
+
+function UserNotification({ message }) {
+  return (
+    <StyledNotification>
+      <p>
+        {message.user.name} {message.action}
+      </p>
+    </StyledNotification>
+  );
 }
 
 const StyledDiv = styled.div`
@@ -130,9 +152,9 @@ const StyledDiv = styled.div`
 `;
 
 // const socket = io.connect('http://localhost:3001');
-const socket = io.connect('https://murmuring-plains-40389.herokuapp.com/');
+// const socket = io.connect('https://murmuring-plains-40389.herokuapp.com/');
 
-export default function ChatRecord() {
+export default function ChatRoom() {
   const { currentUser } = useUser();
   const [currentMessage, setCurrentMessage] = useState('');
   const [messageList, setMessageList] = useState([]);
@@ -140,26 +162,59 @@ export default function ChatRecord() {
   const handleSendMessage = async () => {
     if (currentMessage !== '') {
       const messageData = {
+        type: 'message',
         author: currentUser,
         message: currentMessage,
         time: `${new Date(Date.now()).getHours()}:${new Date(
           Date.now()
         ).getMinutes()}`,
       };
-      // send messageDate to back-end
+      // send messsageDate to back-end
       await socket.emit('send_message', messageData);
       setMessageList((list) => [...list, messageData]);
       setCurrentMessage('');
     }
   };
+
   useEffect(() => {
-    console.log(`${currentUser.name} joined the chat`);
+    // socket.emit('join_chat', currentUser);
+    // console.log(`${currentUser.name} joined the chat`);
+
+    socket.on('user_join', (data) => {
+      setMessageList((list) => [
+        ...list,
+        {
+          type: 'notification',
+          user: data,
+          action: '上線',
+        },
+      ]);
+      console.log(`${data.name} joined the chat`);
+    });
+
     socket.on('receive_message', (data) => {
-      console.log(data);
+      // console.log(data);
       setMessageList((list) => [...list, data]);
       console.log('message received!');
     });
-  }, []);
+
+    socket.on('user_leave', (data) => {
+      setMessageList((list) => [
+        ...list,
+        {
+          type: 'notification',
+          user: data,
+          action: '離開',
+        },
+      ]);
+      console.log(`${data.name} left the chat`);
+    });
+    return () => {
+      socket.off('user_join');
+      socket.off('receive_message');
+      socket.off('user_leave');
+    };
+  }, [messageList]);
 
   return (
     <>
@@ -169,7 +224,12 @@ export default function ChatRecord() {
           <div className="chat-body">
             <ScrollToBottom className="message-container">
               {messageList.map((message, index) => {
-                return <ChatMessage message={message} key={index} />;
+                if (message.type === 'message') {
+                  return <ChatMessage message={message} key={index} />;
+                }
+                if (message.type === 'notification') {
+                  return <UserNotification message={message} key={index} />;
+                }
               })}
             </ScrollToBottom>
           </div>
