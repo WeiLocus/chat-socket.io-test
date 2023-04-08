@@ -8,6 +8,7 @@ import { Header } from '.';
 import { ReactComponent as SendMessage } from '../assets/SendMessage.svg';
 import { useUser } from '../contexts/UserContext';
 import socket from '../socket.js';
+import { messages } from '../dummyData';
 
 const StyledMessage = styled.div`
   padding: 10px;
@@ -158,6 +159,21 @@ export default function ChatRoom() {
   const { currentUser } = useUser();
   const [currentMessage, setCurrentMessage] = useState('');
   const [messageList, setMessageList] = useState([]);
+  const [isLoading, setIsLoading] = useState(true);
+
+  const getMessages = () => {
+    const data = messages;
+    return data;
+  };
+
+  useEffect(() => {
+    const getMessagesAsync = async () => {
+      const returnedMessages = await getMessages();
+      setMessageList(returnedMessages);
+    };
+    getMessagesAsync();
+    setIsLoading(false);
+  }, []);
 
   const handleSendMessage = async () => {
     if (currentMessage !== '') {
@@ -219,35 +235,37 @@ export default function ChatRoom() {
   return (
     <>
       <Header headerText="公開聊天室" />
-      <StyledDiv>
-        <div className="chat-window">
-          <div className="chat-body">
-            <ScrollToBottom className="message-container">
-              {messageList.map((message, index) => {
-                if (message.type === 'message') {
-                  return <ChatMessage message={message} key={index} />;
-                }
-                if (message.type === 'notification') {
-                  return <UserNotification message={message} key={index} />;
-                }
-              })}
-            </ScrollToBottom>
-          </div>
-          <div className="chat-footer">
-            <input
-              type="text"
-              placeholder="輸入訊息..."
-              value={currentMessage}
-              onChange={(event) => {
-                setCurrentMessage(event.target.value);
-              }}
-            />
-            <div className="icon">
-              <SendMessage onClick={handleSendMessage} />
+      {!isLoading && (
+        <StyledDiv>
+          <div className="chat-window">
+            <div className="chat-body">
+              <ScrollToBottom className="message-container">
+                {messageList.map((message, index) => {
+                  if (message.type === 'message') {
+                    return <ChatMessage message={message} key={index} />;
+                  }
+                  if (message.type === 'notification') {
+                    return <UserNotification message={message} key={index} />;
+                  }
+                })}
+              </ScrollToBottom>
+            </div>
+            <div className="chat-footer">
+              <input
+                type="text"
+                placeholder="輸入訊息..."
+                value={currentMessage}
+                onChange={(event) => {
+                  setCurrentMessage(event.target.value);
+                }}
+              />
+              <div className="icon">
+                <SendMessage onClick={handleSendMessage} />
+              </div>
             </div>
           </div>
-        </div>
-      </StyledDiv>
+        </StyledDiv>
+      )}
     </>
   );
 }

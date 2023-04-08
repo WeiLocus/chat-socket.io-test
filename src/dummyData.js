@@ -493,6 +493,63 @@ const users = [
   },
 ];
 
+const messages = [
+  {
+    type: 'message',
+    author: {
+      id: 110,
+      avatar: 'http://placekitten.com/g/500/500',
+    },
+    message: '哈囉',
+    time: '19:01',
+  },
+  {
+    type: 'message',
+    author: {
+      id: 109,
+      avatar: 'http://placekitten.com/g/300/300',
+    },
+    message: '大家好',
+    time: '19:10',
+  },
+  {
+    type: 'message',
+    author: {
+      id: 109,
+      avatar: 'http://placekitten.com/g/300/300',
+    },
+    message: '早安安安安安',
+    time: '19:11',
+  },
+  {
+    type: 'message',
+    author: {
+      id: 109,
+      avatar: 'http://placekitten.com/g/300/300',
+    },
+    message: '吃早餐了嗎大家',
+    time: '19:12',
+  },
+  {
+    type: 'message',
+    author: {
+      id: 107,
+      avatar: 'http://placekitten.com/g/400/400',
+    },
+    message: '吃了蛋餅',
+    time: '19:15',
+  },
+  {
+    type: 'message',
+    author: {
+      id: 110,
+      avatar: 'http://placekitten.com/g/500/500',
+    },
+    message: '我也想吃蛋餅',
+    time: '19:18',
+  },
+];
+
 export {
   tweets,
   replies,
@@ -501,4 +558,5 @@ export {
   users,
   tweetsByUser,
   repliesByUser,
+  messages,
 };
