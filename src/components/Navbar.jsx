@@ -16,6 +16,8 @@ import { ReactComponent as NotificationNavbarIcon } from '../assets/Notification
 import { ReactComponent as NotificationNavbarBlackIcon } from '../assets/Notification-navbar-black.svg';
 import { ReactComponent as ChatRoomOrangeIcon } from '../assets/Chatroom-orange.svg';
 import { ReactComponent as ChatRoomIcon } from '../assets/Chatroom.svg';
+import { ReactComponent as MessageBlackIcon } from '../assets/message-black.svg';
+import { ReactComponent as MessageIcon } from '../assets/message.svg';
 
 const StyledNav = styled.nav`
   width: 100%;
@@ -214,16 +216,28 @@ export function Navbar({ tweetInput, currentUser, onChange, onAddTweet }) {
                 <span>通知</span>
               </StyledLi>
             </NavLink>
-            <NavLink to="/public">
+            <NavLink to="/public-messages">
               <StyledLi>
                 <div className="icon">
-                  {pathname.includes('/public') ? (
+                  {pathname.includes('/public-messages') ? (
                     <ChatRoomOrangeIcon />
                   ) : (
                     <ChatRoomIcon />
                   )}
                 </div>
                 <span>公開聊天室</span>
+              </StyledLi>
+            </NavLink>
+            <NavLink to="/private-messages">
+              <StyledLi>
+                <div className="icon">
+                  {pathname.includes('/private-messages') ? (
+                    <MessageBlackIcon />
+                  ) : (
+                    <MessageIcon />
+                  )}
+                </div>
+                <span>私人訊息</span>
               </StyledLi>
             </NavLink>
             <NavLink
